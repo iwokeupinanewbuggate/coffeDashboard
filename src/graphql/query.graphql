@@ -1,0 +1,96 @@
+query GetMyOrders($getMyOrdersId: ID!) {
+  getMyOrders(id: $getMyOrdersId) {
+    id
+    userId
+    product {
+      productId
+      ingridient
+      size
+      price
+      quantity
+      ingridientAmount
+    }
+    deliveryLocation
+    status
+    couponCode
+    orderedAt
+  }
+}
+
+query GetProduct {
+  getProduct {
+    id
+    name
+    price {
+      small
+      meduim
+      large
+    }
+    category
+    image
+    description
+  }
+}
+
+query GetUser($getUserId: ID!) {
+  getUser(id: $getUserId) {
+    id
+    name
+    email
+    password
+    favorite
+    profilePic
+    address
+    paymentinfo {
+      cardHolder
+      cardNumber
+      experitionDate
+      cvv
+    }
+  }
+}
+
+mutation addCategory($input: categoryInput!) {
+  addCategory(input: $input) {
+    id
+    name
+  }
+}
+
+mutation addCoupon($input: couponInput!) {
+  addCoupon(input: $input) {
+    code
+    discount
+    expirationDate
+  }
+}
+
+mutation AddProduct($input: productInfo!) {
+  addProduct(input: $input) {
+    id
+    name
+    price {
+      small
+      meduim
+      large
+    }
+    category
+    image
+    description
+  }
+}
+
+mutation RemoveProduct($removeProductId: ID!) {
+  removeProduct(id: $removeProductId) {
+    id
+    name
+    price {
+      small
+      meduim
+      large
+    }
+    category
+    image
+    description
+  }
+}
