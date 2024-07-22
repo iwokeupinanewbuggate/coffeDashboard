@@ -1,34 +1,32 @@
 "use client";
-import { Product } from "@/components/product";
-import { useGetProductQuery } from "../../generated";
-import AddProduct from "@/components/addProduct";
+import { useGetOrdersQuery } from "../../../generated";
 import { ChangeEvent, useState } from "react";
 import { Trash } from "@/components/icons/trashCan";
 import { EditIcon } from "@/components/icons/editIcon";
 import Link from "next/link";
+import { OrdersList } from "@/components/order";
 
-export default function Home() {
+export default function Orders() {
   const [searchBar, setSearchBar] = useState("");
-  const { data, loading, error } = useGetProductQuery();
-  console.log(data?.getProduct);
+  const { data, loading, error } = useGetOrdersQuery();
+
+  const [username, setUsername] = useState<string | undefined>("");
+  const filteredBySearch = data?.getOrders?.filter(() => {
+    if (searchBar === "") {
+      return data?.getOrders;
+    } else {
+      return username
+        ?.toLocaleLowerCase()
+        .includes(searchBar.toLocaleLowerCase());
+    }
+  });
+  if (loading) return <div>Loading...</div>;
+
+  if (error) return <div>{error.message}</div>;
 
   const getQuery = window.location.pathname;
 
   const isPageOnMainProduct = getQuery === "/" || getQuery === "/orders";
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error.message}</div>;
-
-  const filteredBySearch = data?.getProduct?.filter((product) => {
-    if (searchBar === "") {
-      return data?.getProduct;
-    } else {
-      return product.name
-        .toLocaleLowerCase()
-        .includes(searchBar.toLocaleLowerCase());
-    }
-  });
-
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchBar(event.target.value);
   };
@@ -83,7 +81,6 @@ export default function Home() {
               gap: "30px",
             }}
           >
-            <AddProduct />
             <input
               placeholder="Search"
               value={searchBar}
@@ -97,7 +94,7 @@ export default function Home() {
             />
             <div
               style={{
-                width: "75vw",
+                width: "80vw",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -106,12 +103,22 @@ export default function Home() {
               <h1
                 style={{
                   border: "1px black solid",
-                  width: "15vw",
+                  width: "10vw",
                   padding: "5px",
                   height: "3vh",
                 }}
               >
-                ID
+                Username
+              </h1>
+              <h1
+                style={{
+                  border: "1px black solid",
+                  width: "10vw",
+                  padding: "5px",
+                  height: "3vh",
+                }}
+              >
+                Email
               </h1>
               <h1
                 style={{
@@ -121,17 +128,7 @@ export default function Home() {
                   height: "3vh",
                 }}
               >
-                Name
-              </h1>
-              <h1
-                style={{
-                  border: "1px black solid",
-                  width: "11vw",
-                  padding: "5px",
-                  height: "3vh",
-                }}
-              >
-                Description
+                Date
               </h1>
               <h1
                 style={{
@@ -141,8 +138,9 @@ export default function Home() {
                   height: "3vh",
                 }}
               >
-                Category
+                status
               </h1>
+
               <div
                 style={{
                   border: "1px black solid",
@@ -160,18 +158,18 @@ export default function Home() {
                     borderTop: "none",
                   }}
                 >
-                  Large
+                  Quanity
                 </h1>
                 <h1
                   style={{
                     border: "1px solid black",
                     padding: "5px",
-                    width: "5vw",
+                    width: "10vw",
                     borderBottom: "none",
                     borderTop: "none",
                   }}
                 >
-                  Meduim
+                  Ingrediant Amount
                 </h1>
                 <h1
                   style={{
@@ -182,7 +180,7 @@ export default function Home() {
                     borderTop: "none",
                   }}
                 >
-                  Small
+                  Size
                 </h1>
                 <div
                   style={{
@@ -198,15 +196,13 @@ export default function Home() {
               </div>
             </div>
           </div>
-          {filteredBySearch?.map((info, key) => (
-            <Product
+          {filteredBySearch?.map((order, key) => (
+            <OrdersList
               key={key}
-              name={info.name}
-              price={info.price}
-              id={info.id}
-              description={info.description}
-              category={info.category}
-              image={info.image}
+              date={order.orderedAt}
+              orderData={order}
+              setUsername={setUsername}
+              orderStatus={order.status}
             />
           ))}
         </div>

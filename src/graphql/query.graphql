@@ -32,6 +32,21 @@ query GetProduct {
   }
 }
 
+query GetOneProduct($getOneProductId: ID!) {
+  getOneProduct(id: $getOneProductId) {
+    id
+    name
+    price {
+      small
+      meduim
+      large
+    }
+    category
+    image
+    description
+  }
+}
+
 query GetUser($getUserId: ID!) {
   getUser(id: $getUserId) {
     id
@@ -47,6 +62,32 @@ query GetUser($getUserId: ID!) {
       experitionDate
       cvv
     }
+  }
+}
+
+query GetCatgeory {
+  getCategory {
+    id
+    name
+  }
+}
+
+query GetOrders {
+  getOrders {
+    id
+    userId
+    product {
+      productId
+      ingridient
+      size
+      price
+      quantity
+      ingridientAmount
+    }
+    deliveryLocation
+    status
+    couponCode
+    orderedAt
   }
 }
 
@@ -88,6 +129,21 @@ mutation RemoveProduct($removeProductId: ID!) {
       small
       meduim
       large
+    }
+    category
+    image
+    description
+  }
+}
+
+mutation editProduct($input: editProduct!) {
+  editProduct(input: $input) {
+    id
+    name
+    price {
+      large
+      meduim
+      small
     }
     category
     image
