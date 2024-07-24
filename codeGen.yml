@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:5000/api/graphql"
+schema: "https://coffe-back.vercel.app/api/graphql"
 
 documents: "./src/graphql/**/*.graphql"
 
