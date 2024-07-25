@@ -92,6 +92,7 @@ export type Query = {
   getOneProduct: Product;
   getOrders?: Maybe<Array<Order>>;
   getProduct: Array<Product>;
+  getProductCategory: Category;
   getUser: User;
 };
 
@@ -102,6 +103,11 @@ export type QueryGetMyOrdersArgs = {
 
 
 export type QueryGetOneProductArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetProductCategoryArgs = {
   id: Scalars['ID']['input'];
 };
 
